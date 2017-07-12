@@ -208,14 +208,6 @@ def cache():
 
     logger.writeLogToFile()
 
-def move_to_prod():
-    source = 'C:\\arcgisserver\\directories\\arcgiscache\\' + service_name.replace('/', '_')
-    dest = source.replace(r'C:\arcgisserver', settings.PROD + r'\c$\ClusterStorage\Volume1\arcgis') + '_NEW'
-    shutil.copytree(source, dest)
-    emptyDir = os.path.join(source, 'Layers', '_alllayers')
-    shutil.rmtree(emptyDir)
-    os.mkdir(emptyDir)
-
 
 def main(s_name, overwrite, update, test):
     global service_name
@@ -238,10 +230,6 @@ def main(s_name, overwrite, update, test):
     start_bundles = get_bundles_count()
 
     cache()
-
-    # disabled for hybrid
-    if not 'BaseMaps' not in service_name:
-        move_to_prod()
 
 if __name__ == '__main__':
     arg_prompts = ['Cache name with folder ( e.g. "Terrain"): ',
