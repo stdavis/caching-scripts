@@ -13,8 +13,8 @@ from agrc import messaging
 from agrc import logging
 from agrc import update
 from agrc import arcpy_helpers
-import update_wgs_data
-import subprocess
+import update_data
+import settings
 
 extentsFGDB = r'C:\Cache\MapData\Extents.gdb'
 cache_dir = r'C:\arcgisserver\directories\arcgiscache'
@@ -150,14 +150,6 @@ def cache_test_extent():
         emailer.sendEmail('Cache Test Extent Error ({}) - arcpy.ExecuteError'.format(service_name), logger.log)
         raise arcpy.ExecuteError
 
-def update_data():
-    logger.logMsg('Updating data')
-
-    subprocess.check_call(['forklift', 'lift', pallet])
-
-    logger.logMsg('Data update complete')
-
-    emailer.sendEmail(email_subject, 'Data update complete. Proceeding with caching...')
 
 def cache():
     arcpy.env.workspace = extentsFGDB
@@ -221,7 +213,8 @@ def main(s_name, overwrite, update, test):
     global email_subject
     email_subject = 'Cache Update ({})'.format(service_name)
     if update == 'Y':
-        update_data()
+        update_data.main()
+        emailer.sendEmail(email_subject, 'Data update complete. Proceeding with caching...')
     if test == 'Y':
         cache_test_extent()
     global update_mode
