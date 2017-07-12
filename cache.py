@@ -8,6 +8,7 @@ import arcpy
 import os
 import time
 import shutil
+import sys
 from agrc import messaging
 from agrc import logging
 from agrc import update
@@ -243,7 +244,15 @@ def main(s_name, overwrite, update, test):
         move_to_prod()
 
 if __name__ == '__main__':
-    main(raw_input('Cache name with folder ( e.g. "Terrain"): '),
-         raw_input('Overwrite existing tiles? (Y/N) '),
-         raw_input('Update data? (Y/N): '),
-         raw_input('Run a test cache? (Y/N): '))
+    arg_prompts = ['Cache name with folder ( e.g. "Terrain"): ',
+                   'Overwrite existing tiles? (Y/N) ',
+                   'Update data? (Y/N): ',
+                   'Run a test cache? (Y/N): ']
+    args = []
+    for i, prompt in enumerate(arg_prompts):
+        try:
+            args.append(sys.argv[i + 1])
+        except IndexError:
+            args.append(raw_input(prompt))
+
+    main(*args)
