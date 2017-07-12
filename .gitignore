@@ -88,3 +88,4 @@ ENV/
 # Rope project settings
 .ropeproject
 settings/__init__.py
+Logs/
